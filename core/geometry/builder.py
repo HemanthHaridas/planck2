@@ -102,8 +102,28 @@ class Molecule:
                 self.atomCoordinates[_atom_index, :]    =   _transformed_point + self.atomCoordinates[_index_atom, :]
 
     def create_molecule_cartesian_from_file(self, input_file: str) -> None:
+        with open(input_file) as _inpObject:
+            _file_data              =   _inpObject.readlines()
+            _charge,_multiplicity   =   _file_data[0].split()
+            _cartesian_coordinates  =   _file_data[2:]
+            _natoms                 =   len(_cartesian_coordinates)
+
+            self.natoms             =   _natoms
+            self.atomCoordinates    =   numpy.zeros((_natoms, 3))
+            self.atomNumbers        =   numpy.zeros(_natoms)
+            self.charge             =   int(_charge)
+            self.multiplicity       =   int(_multiplicity) 
+
+            for _atom_index, _atom in enumerate(_cartesian_coordinates):
+                self.atomNames.append(_atom.split()[0])
+                self.atomCoordinates[_atom_index,:] =   [float(coord) for coord in _atom.split()[1:]]
+    
+    def create_molecule_zmatrix_from_input(self, zmat: str) -> None:
         pass
 
+    def create_molecule_cartesian_from_input(self, cartesian: str) -> None:
+        pass
+    
     def print_cartesian_coordinates(self) -> None:
         for _atomname, _atomcoords in zip(self.atomNames, self.atomCoordinates):
             print("{:<5s}{:10.3f}{:10.3f}{:10.3f}".format(_atomname, _atomcoords[0], _atomcoords[1], _atomcoords[2]))
