@@ -20,9 +20,10 @@ from    core.geometry.builder import Molecule
 import  sys
 
 class RHF:
-    def __init__(self, molecule: Molecule, scf_cycles: int = 100, conv_tol: float = 1.0e-12) -> None:
+    def __init__(self, molecule: Molecule, basis_set: str = "sto-3g", scf_cycles: int = 100, conv_tol: float = 1.0e-12) -> None:
         self.basis      = None
         self.diis       = True
+        self.basis_set  = basis_set  
         self.scf_cycles = scf_cycles
         self.conv_tol   = conv_tol
         self.molecule   = molecule
