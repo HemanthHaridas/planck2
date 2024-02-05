@@ -16,11 +16,11 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
-import numpy    as numpy
-import math     as math
-import sys      as sys
-import os       as os
-import time     as time
+import  numpy    as numpy
+import  math     as math
+import  sys      as sys
+import  os       as os
+import  time     as time
 
 class Molecule:
     def __init__(self) -> None:
