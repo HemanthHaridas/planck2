@@ -186,7 +186,6 @@ class Molecule:
                 
                 self.atomCoordinates[_atom_index, :]    =   _transformed_point + self.atomCoordinates[_index_atom, :]
 
-
     def create_molecule_cartesian_from_input(self, cartesian: str, charge: int, multiplicity: int) -> None:
         self.charge             =   charge
         self.multiplicity       =   multiplicity
