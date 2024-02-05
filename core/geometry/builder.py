@@ -25,7 +25,7 @@ import time     as time
 class Molecule:
     def __init__(self) -> None:
         self.nAtoms             =   0
-        self.atomCoordinates    =   None
+        self.atomCoordinates    =   []
         self.atomNames          =   []
         self.atomNumbers        =   None
         self.charge             =   0
