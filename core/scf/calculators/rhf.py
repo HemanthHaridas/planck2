@@ -44,3 +44,5 @@ class RHF:
     def build_integrals(self) -> None:
         if self.check_charge_multiplicity():
             pass
+        else:
+            sys.exit(-1)
