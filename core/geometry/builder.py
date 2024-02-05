@@ -27,7 +27,7 @@ class Molecule:
         self.nAtoms             =   0
         self.atomCoordinates    =   []
         self.atomNames          =   []
-        self.atomNumbers        =   None
+        self.atomNumbers        =   []
         self.charge             =   0
         self.multiplicity       =   1
 

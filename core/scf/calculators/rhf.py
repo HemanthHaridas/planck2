@@ -16,16 +16,30 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
-from core.geometry.builder import Molecule
+from    core.geometry.builder import Molecule
+import  sys
 
 class RHF:
-    def __init__(self, molecule: Molecule) -> None:
+    def __init__(self, molecule: Molecule, scf_cycles: int = 100, conv_tol: float = 1.0e-12) -> None:
         self.basis      = None
+        self.diis       = True
+        self.scf_cycles = scf_cycles
+        self.conv_tol   = conv_tol
         self.molecule   = molecule
+        self.n_alpha    = 0
+        self.n_beta     = 0
     
-    def check_charge_multiplicity(self) -> None:
-        pass
+    def check_charge_multiplicity(self) -> bool:
+        _total_electrons    = sum(self.molecule.atomNumbers) + self.molecule.charge
+        try:
+            assert _total_electrons % 2 == 0, f"[ERROR] Total number of electrons {_total_electrons} is not even. Given charge {self.molecule.charge} is not valid for the multiplicity {self.molecule.multiplicity}. Exiting!"
+        except AssertionError as _error_message:
+            print(_error_message)
+            return False
+        self.n_alpha    =   _total_electrons // 2
+        self.n_beta     =   _total_electrons // 2
+        return True
     
     def build_integrals(self) -> None:
-        pass
-    
+        if self.check_charge_multiplicity():
+            pass
