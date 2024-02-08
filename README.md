@@ -20,7 +20,8 @@ water_molecule.create_molecule_zmatrix_from_file(input_file = "water.zmat")
 water_geometry="""
 H
 O   1   1.10
-H   2   1.10    1   109.45"""
+H   2   1.10    1   109.45
+"""
 
 from planck2.core.geometry.builder import Molecule
 water_molecule  =   Molecule()
