@@ -219,13 +219,3 @@ class Molecule:
     def print_cartesian_coordinates(self) -> None:
         for _atomname, _atomcoords in zip(self.atomNames, self.atomCoordinates):
             print("{:<5s}{:10.3f}{:10.3f}{:10.3f}".format(_atomname, _atomcoords[0], _atomcoords[1], _atomcoords[2]))
-
-water = """
-H
-O   1   1.1
-H   2   1.1     1   109.45
-"""
-
-water_molecule  =   Molecule()
-water_molecule.create_molecule_zmatrix_from_input(zmat=water, charge=0, multiplicity=1)
-water_molecule.print_cartesian_coordinates()
