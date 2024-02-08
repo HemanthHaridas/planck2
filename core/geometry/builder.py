@@ -16,12 +16,13 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 
-import  numpy       as numpy
-import  math        as math
-import  sys         as sys
-import  os          as os
-import  time        as time
+import  numpy       as  numpy
+import  math        as  math
+import  sys         as  sys
+import  os          as  os
+import  time        as  time
 import  tempfile    as  tmp
+from    auxiliary   import periodic_table
 
 class Molecule:
     def __init__(self) -> None:
@@ -47,12 +48,14 @@ class Molecule:
 
             # if only one atom, place it at origin
             self.atomNames.append(_internal_coordinates[0].split()[0])
+            self.atomNumbers[0]         =   periodic_table.atomic_number[self.atomNames[0]]
             self.atomCoordinates[0,:]   =   numpy.zeros(3)
 
             # for second atom, we need a distance, and place it
             # along the positive x-axis
 
             self.atomNames.append(_internal_coordinates[1].split()[0])
+            self.atomNumbers[1]         =   periodic_table.atomic_number[self.atomNames[1]]
             self.atomCoordinates[1][0]  =   float(_internal_coordinates[1].split()[2])
         
             # generate a coordinate frame with the connecting atom 
@@ -60,6 +63,7 @@ class Molecule:
             # places the third atom along the x-y plane.
 
             self.atomNames.append(_internal_coordinates[2].split()[0])
+            self.atomNumbers[2]         =   periodic_table.atomic_number[self.atomNames[2]]
             _bond_length    =   float(_internal_coordinates[2].split()[2])
             _bond_angle     =   float(_internal_coordinates[2].split()[4])
             _index_atom     =   int(_internal_coordinates[2].split()[1]) - 1
@@ -75,12 +79,13 @@ class Molecule:
             # now place the remaining atoms
             for _atom_index in range(3, _natoms):
                 self.atomNames.append(_internal_coordinates[_atom_index].split()[0])
-                _bond_length    =   float(_internal_coordinates[_atom_index].split()[2])
-                _bond_angle     =   180 - float(_internal_coordinates[_atom_index].split()[4])
-                _bond_dihedral  =   180 - float(_internal_coordinates[_atom_index].split()[6])
-                _index_atom     =   int(_internal_coordinates[_atom_index].split()[1]) - 1
-                _second_atom    =   int(_internal_coordinates[_atom_index].split()[3]) - 1
-                _third_atom     =   int(_internal_coordinates[_atom_index].split()[5]) - 1 
+                self.atomNumbers[_atom_index]   =   periodic_table.atomic_number[self.atomNames[_atom_index]]
+                _bond_length                    =   float(_internal_coordinates[_atom_index].split()[2])
+                _bond_angle                     =   180 - float(_internal_coordinates[_atom_index].split()[4])
+                _bond_dihedral                  =   180 - float(_internal_coordinates[_atom_index].split()[6])
+                _index_atom                     =   int(_internal_coordinates[_atom_index].split()[1]) - 1
+                _second_atom                    =   int(_internal_coordinates[_atom_index].split()[3]) - 1
+                _third_atom                     =   int(_internal_coordinates[_atom_index].split()[5]) - 1 
 
                 _location_x     =   _bond_length * math.cos(_bond_angle * math.pi/180)
                 _location_y     =   _bond_length * math.sin(_bond_angle * math.pi/180) * math.cos(_bond_dihedral * math.pi/180)
@@ -117,7 +122,8 @@ class Molecule:
 
             for _atom_index, _atom in enumerate(_cartesian_coordinates):
                 self.atomNames.append(_atom.split()[0])
-                self.atomCoordinates[_atom_index,:] =   [float(coord) for coord in _atom.split()[1:]]
+                self.atomNumbers[_atom_index]           =   periodic_table.atomic_number[self.atomNames[_atom_index]]
+                self.atomCoordinates[_atom_index,:]     =   [float(coord) for coord in _atom.split()[1:]]
     
     def create_molecule_zmatrix_from_input(self, zmat: str, charge: int, multiplicity: int) -> None:
             self.charge             =   charge
@@ -131,12 +137,14 @@ class Molecule:
 
             # if only one atom, place it at origin
             self.atomNames.append(_internal_coordinates[0].split()[0])
+            self.atomNumbers[0]         =   periodic_table.atomic_number[self.atomNames[0]]
             self.atomCoordinates[0,:]   =   numpy.zeros(3)
 
             # for second atom, we need a distance, and place it
             # along the positive x-axis
 
             self.atomNames.append(_internal_coordinates[1].split()[0])
+            self.atomNumbers[0]         =   periodic_table.atomic_number[self.atomNames[1]]
             self.atomCoordinates[1][0]  =   float(_internal_coordinates[1].split()[2])
         
             # generate a coordinate frame with the connecting atom 
@@ -144,6 +152,7 @@ class Molecule:
             # places the third atom along the x-y plane.
 
             self.atomNames.append(_internal_coordinates[2].split()[0])
+            self.atomNumbers[2]         =   periodic_table.atomic_number[self.atomNames[2]]
             _bond_length    =   float(_internal_coordinates[2].split()[2])
             _bond_angle     =   float(_internal_coordinates[2].split()[4])
             _index_atom     =   int(_internal_coordinates[2].split()[1]) - 1
@@ -159,12 +168,13 @@ class Molecule:
             # now place the remaining atoms
             for _atom_index in range(3, _natoms):
                 self.atomNames.append(_internal_coordinates[_atom_index].split()[0])
-                _bond_length    =   float(_internal_coordinates[_atom_index].split()[2])
-                _bond_angle     =   180 - float(_internal_coordinates[_atom_index].split()[4])
-                _bond_dihedral  =   180 - float(_internal_coordinates[_atom_index].split()[6])
-                _index_atom     =   int(_internal_coordinates[_atom_index].split()[1]) - 1
-                _second_atom    =   int(_internal_coordinates[_atom_index].split()[3]) - 1
-                _third_atom     =   int(_internal_coordinates[_atom_index].split()[5]) - 1 
+                self.atomNumbers[_atom_index]           =   periodic_table.atomic_number[self.atomNames[_atom_index]]
+                _bond_length                            =   float(_internal_coordinates[_atom_index].split()[2])
+                _bond_angle                             =   180 - float(_internal_coordinates[_atom_index].split()[4])
+                _bond_dihedral                          =   180 - float(_internal_coordinates[_atom_index].split()[6])
+                _index_atom                             =   int(_internal_coordinates[_atom_index].split()[1]) - 1
+                _second_atom                            =   int(_internal_coordinates[_atom_index].split()[3]) - 1
+                _third_atom                             =   int(_internal_coordinates[_atom_index].split()[5]) - 1 
 
                 _location_x     =   _bond_length * math.cos(_bond_angle * math.pi/180)
                 _location_y     =   _bond_length * math.sin(_bond_angle * math.pi/180) * math.cos(_bond_dihedral * math.pi/180)
@@ -198,7 +208,8 @@ class Molecule:
 
         for _atom_index, _atom in enumerate(_cartesian_coordinates):
             self.atomNames.append(_atom.split()[0])
-            self.atomCoordinates[_atom_index,:] =   [float(coord) for coord in _atom.split()[1:]]
+            self.atomNumbers[_atom_index]           =   periodic_table.atomic_number[self.atomNames[_atom_index]]
+            self.atomCoordinates[_atom_index,:]     =   [float(coord) for coord in _atom.split()[1:]]
 
     def print_cartesian_coordinates(self) -> None:
         for _atomname, _atomcoords in zip(self.atomNames, self.atomCoordinates):
