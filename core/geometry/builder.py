@@ -22,7 +22,12 @@ import  sys         as  sys
 import  os          as  os
 import  time        as  time
 import  tempfile    as  tmp
-from    auxiliary   import periodic_table
+
+# Need this trick to import non-standard imports
+object_path         =   os.path.dirname(os.path.dirname(__file__))
+periodic_table_path =   os.path.join(object_path, "..", "auxiliary")
+sys.path.append(periodic_table_path)
+import  periodic_table
 
 class Molecule:
     def __init__(self) -> None:
