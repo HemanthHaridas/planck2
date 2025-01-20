@@ -1,3 +1,18 @@
+#  Planck
+#  Copyright (C) 2024 Hemanth Haridas, University of Utah
+#  Contact: hemanthhari23@gmail.com
+# 
+#  This program is free software: you can redistribute it and/or modify it under
+#  the terms of the GNU General Public License as published by the Free Software
+#  Foundation, either version 3 of the License, or a later version.
+# 
+#  This program is distributed in the hope that it will be useful, but WITHOUT ANY
+#  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+#  PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+# 
+#  You should have received a copy of the GNU General Public License along with
+#  this program.  If not, see <http://www.gnu.org/licenses/>.
+
 from planck.src.geometry.base import BaseMolecule
 
 class Molecule(BaseMolecule):
@@ -70,41 +85,41 @@ class Molecule(BaseMolecule):
             self.atoms.append(_atom)  # Append atomic symbol to atoms list
             self.coords.append(_coords)  # Append coordinates to coords list
 
-def build(self, atoms: list[str], coords: list[list[float]], charge: int, multi: int) -> None:
-    """
-    Populates the attributes of a molecular object with atomic and molecular data.
+    def build(self, atoms: list[str], coords: list[list[float]], charge: int, multi: int) -> None:
+        """
+        Populates the attributes of a molecular object with atomic and molecular data.
 
-    This method is used to initialize or update the molecule's atomic structure,
-    spatial coordinates, charge, and multiplicity.
+        This method is used to initialize or update the molecule's atomic structure,
+        spatial coordinates, charge, and multiplicity.
 
-    Args:
-    -----
-    atoms (list[str])         : A list of atomic symbols representing the types of atoms in the molecule.
-    coords (list[list[float]]): A list of lists where each sublist contains the 3D coordinates [x, y, z]
-                                of an atom. The number of sublists should match the number of atoms.
-    charge (int): The overall charge of the molecule.
-    multi (int) : The spin multiplicity of the molecule (2S + 1), where S is the total spin.
+        Args:
+        -----
+        atoms (list[str])         : A list of atomic symbols representing the types of atoms in the molecule.
+        coords (list[list[float]]): A list of lists where each sublist contains the 3D coordinates [x, y, z]
+                                    of an atom. The number of sublists should match the number of atoms.
+        charge (int): The overall charge of the molecule.
+        multi (int) : The spin multiplicity of the molecule (2S + 1), where S is the total spin.
 
-    Returns:
-    --------
-    None: This method does not return a value. It updates the instance attributes `atoms`, `coords`,
-          `charge`, and `multi`.
+        Returns:
+        --------
+        None: This method does not return a value. It updates the instance attributes `atoms`, `coords`,
+            `charge`, and `multi`.
 
-    Example Usage:
-    --------------
-    mol = Molecule()
-    mol.build(
-        atoms  = ["H", "O", "H"],
-        coords = [
-                    [0.0, 0.757, 0.586], 
-                    [0.0, 0.0, 0.0], 
-                    [0.0, -0.757, 0.586]
-                ],
-        charge = 0,
-        multi  = 1
-    )
-    """
-    self.atoms  = atoms
-    self.coords = coords
-    self.charge = charge
-    self.multi  = multi
+        Example Usage:
+        --------------
+        mol = Molecule()
+        mol.build(
+            atoms  = ["H", "O", "H"],
+            coords = [
+                        [0.0, 0.757, 0.586], 
+                        [0.0, 0.0, 0.0], 
+                        [0.0, -0.757, 0.586]
+                    ],
+            charge = 0,
+            multi  = 1
+        )
+        """
+        self.atoms  = atoms
+        self.coords = coords
+        self.charge = charge
+        self.multi  = multi
