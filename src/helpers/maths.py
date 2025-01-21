@@ -14,6 +14,7 @@
 #  this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import numpy
+import typing
 
 def rotation_matrix(axis: list[float], angle: float) -> list[float]:
     """
@@ -45,3 +46,6 @@ def rotation_matrix(axis: list[float], angle: float) -> list[float]:
                 [2*(_b*_d - _a*_c), 2*(_c*_d + _a*_b), _a*_a - _b*_b - _c*_c + _d*_d]
                 ]
     )
+
+def gaussian_products(center1: list[float], exponent1: list[float], center2: list[float], exponent2: list[float]) -> typing.Union[list[float], list[list[float]]]:
+    pass
