@@ -14,9 +14,119 @@
 #  this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from planck.src.geometry.base import BaseMolecule
+from planck.src.helpers import maths
+import numpy
 
 class Molecule(BaseMolecule):
-    def geometry(self, structure: str) -> None:
-        return NotImplemented
-    def build(self) -> None:
-        return NotImplemented
+    """
+    A class representing a molecule, inheriting from the BaseMolecule class. This class processes molecular
+    structures provided as a string, extracting details such as molecular charge, multiplicity, number of 
+    atoms, atomic symbols, and coordinates.
+
+    Attributes:
+    -----------
+    charge (int) : The molecular charge.
+    multi (int)  : The multiplicity of the molecule.
+    natoms (int) : The number of atoms in the molecule.
+    atoms (list) : A list to store the atomic symbols of the molecule.
+    coords (list): A list to store the atomic coordinates as lists of floats.
+
+    Methods:
+    --------
+    geometry(structure: str) -> None:
+        Parses the molecular structure string to populate the molecular attributes such as charge, multiplicity, 
+        number of atoms, atomic symbols, and coordinates.
+    """
+    
+    def geometry(self, structure: str) -> None:  
+        """
+        Builds the molecular structure from a Z-matrix input.
+
+        Args:
+        -----
+            structure (str): A Z-matrix formatted string defining the molecular structure.
+                - The first line contains the molecular charge and multiplicity, separated by a space.
+                - Subsequent lines define the atoms and their relative positions.
+
+        Attributes Initialized:
+        -----------------------
+            - atoms (list of str): List of atomic symbols in the molecule.
+            - coords (lists of float): List of Cartesian coordinates for each atom.
+              The first atom is always placed at the origin [0, 0, 0].
+            - charge (int): Net charge of the molecule, extracted from the first line.
+            - multi (int): Spin multiplicity of the molecule, extracted from the first line.
+        """
+        self.atoms  = []
+        self.coords = []
+        
+        # Split the input structure into lines, ignoring empty ones
+        _structure = [line for line in structure.splitlines() if line.strip()]
+        
+        # Extract charge and multiplicity from the first line
+        self.charge = int(_structure[0].split()[0])
+        self.multi  = int(_structure[0].split()[1])
+        
+        # Append the first atom to the list of atoms
+        self.atoms.append(_structure[1].split()[0])
+        self.coords.append([0, 0, 0]) # Because first atom is always placed at origin
+        
+        # Now read the second atom
+        self.atoms.append(_structure[2].split()[0])
+        _distance = float(_structure[2].split()[-1]) # Second atom is always placed on x-axis and will be connected to first
+        self.coords.append([_distance, 0, 0])
+        
+        # Now read the third line
+        self.atoms.append(_structure[3].split()[0])
+        _distance = float(_structure[3].split()[2])     # Get the distance to the atom bonded
+        _angle    = float(_structure[3].split()[4])     # Get the angle to the next nearest neighbour
+        _bonded_a = int(_structure[3].split()[1]) - 1   # Get the atom to which it is bonded
+        _angle_a  = int(_structure[3].split()[3]) - 1   # Get the next nearest neighbour
+        
+        # Calculate the bond vector along x-axis
+        _bond_vec = numpy.array(self.coords[_angle_a]) - numpy.array(self.coords[_bonded_a])
+        _bond_vec = _bond_vec / numpy.linalg.norm(_bond_vec)
+
+        # Rotate this along z-axis to required angle and place the atom
+        _x_coord = self.coords[_bonded_a][0] + _distance * _bond_vec[0] * numpy.cos(_angle * numpy.pi/180) - _distance * _bond_vec[1] * numpy.sin(_angle * numpy.pi/180)# Calculate the position in XY plane
+        _y_coord = self.coords[_bonded_a][1] + _distance * _bond_vec[0] * numpy.sin(_angle * numpy.pi/180) + _distance * _bond_vec[1] * numpy.cos(_angle * numpy.pi/180)# Calculate the position in XY plane
+        self.coords.append([_x_coord, _y_coord, 0])
+        
+        # Now process remaining lines
+        for _line in _structure[4:]:
+            self.atoms.append(_line.split()[0])
+            _distance = float(_line.split()[2])     # Get the distance to the atom bonded
+            _angle    = float(_line.split()[4])     # Get the angle to the next nearest neighbour
+            _dihedral = float(_line.split()[6])     # Get the dihedral to the first atom
+            _bonded_a = int(_line.split()[1]) - 1   # Get the atom to which it is bonded
+            _angle_a  = int(_line.split()[3]) - 1   # Get the next nearest neighbour
+            _dihed_a  = int(_line.split()[5]) - 1   # Get the first atom
+        
+            # Calculate the bond vector
+            _bond_vec = numpy.array(self.coords[_angle_a]) - numpy.array(self.coords[_bonded_a])
+            _bond_vec = _bond_vec / numpy.linalg.norm(_bond_vec)  
+            
+            # Calculate the angle vector
+            _angle_vec = numpy.array(self.coords[_angle_a]) - numpy.array(self.coords[_dihed_a])
+            _angle_vec = _angle_vec / numpy.linalg.norm(_angle_vec)   
+            
+            # Calculate the normal plane
+            _norm_vec = numpy.cross(_bond_vec, _angle_vec)
+            
+            # Rotate the  bond_vec about normal plane by angle
+            _ini_vec = _distance * _bond_vec
+            _rot_mat  = maths.rotation_matrix(axis = _norm_vec, angle = _angle)
+            _rot_bond = numpy.dot(_rot_mat, _bond_vec)
+            
+            # Rotate the rotated bond about bond_vec by dihedral
+            _rot_mat  = maths.rotation_matrix(axis = _bond_vec, angle = _dihedral)
+            _rot_bond = numpy.dot(_rot_mat, _rot_bond)
+            
+            # Calculate the new position
+            _x_coord = self.coords[_bonded_a][0] + _rot_bond[0]
+            _y_coord = self.coords[_bonded_a][1] + _rot_bond[1]
+            _z_coord = self.coords[_bonded_a][2] + _rot_bond[2]
+            
+            self.coords.append([_x_coord, _y_coord, _z_coord])
+            
+        # Flatten the list for easier processing
+        self.coords = numpy.array(self.coords).flatten()

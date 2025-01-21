@@ -13,8 +13,8 @@
 #  You should have received a copy of the GNU General Public License along with
 #  this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import numpy
 from abc import ABC, abstractmethod
+import numpy
 
 class BaseMolecule(ABC):
     """
@@ -43,18 +43,4 @@ class BaseMolecule(ABC):
         Raises:
             NotImplementedError: If the method is not implemented in a subclass.
         """
-        pass
-    
-    @abstractmethod
-    def build(self) -> None:
-        """
-        Define the geometric properties of the molecule.
-
-        This method should be implemented in subclasses to provide specific details
-        about the molecule's geometry. The implementation can include attributes 
-        such as atomic positions, bond lengths, angles, and molecular shape.
-
-        Raises:
-            NotImplementedError: If the method is not implemented in a subclass.
-        """    
         pass

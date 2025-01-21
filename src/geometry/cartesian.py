@@ -14,6 +14,7 @@
 #  this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from planck.src.geometry.base import BaseMolecule
+import numpy
 
 class Molecule(BaseMolecule):
     """
@@ -53,13 +54,6 @@ class Molecule(BaseMolecule):
         None: This method does not return a value. It updates the instance attributes (charge, multi, natoms, 
               atoms, and coords).
 
-        Example Input Format:
-        ---------------------
-        0 1
-        H 0.000 0.757 0.586
-        O 0.000 0.000 0.000
-        H 0.000 -0.757 0.586
-
         Raises:
         -------
         ValueError: If the input structure string is malformed or missing required data.
@@ -84,7 +78,10 @@ class Molecule(BaseMolecule):
             _coords = [float(_coord) for _coord in _line.split()[1:]]  # Extract and convert coordinates
             self.atoms.append(_atom)  # Append atomic symbol to atoms list
             self.coords.append(_coords)  # Append coordinates to coords list
-
+        
+        # Flatten the list for easier processing
+        self.coords = numpy.array(self.coords).flatten()
+        
     def build(self, atoms: list[str], coords: list[list[float]], charge: int, multi: int) -> None:
         """
         Populates the attributes of a molecular object with atomic and molecular data.
@@ -104,22 +101,8 @@ class Molecule(BaseMolecule):
         --------
         None: This method does not return a value. It updates the instance attributes `atoms`, `coords`,
             `charge`, and `multi`.
-
-        Example Usage:
-        --------------
-        mol = Molecule()
-        mol.build(
-            atoms  = ["H", "O", "H"],
-            coords = [
-                        [0.0, 0.757, 0.586], 
-                        [0.0, 0.0, 0.0], 
-                        [0.0, -0.757, 0.586]
-                    ],
-            charge = 0,
-            multi  = 1
-        )
         """
         self.atoms  = atoms
-        self.coords = coords
+        self.coords = coords.to_list()
         self.charge = charge
         self.multi  = multi

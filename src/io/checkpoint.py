@@ -28,7 +28,10 @@ def write_checkpoint(fchk: str, content: typing.Union[list[float], list[list[flo
         _geom_element = xml.etree.ElementTree.SubElement("geometry")
         _dens_element = xml.etree.ElementTree.SubElement("density")
         _tree         = xml.etree.ElementTree.ElementTree(root)
-        _tree.write(fchk)
+        _xmlSting     = eTree.tostring(root, encoding = "utf-8", method = "xml")
+        _dom          = minidom.parseString(xmlSting)
+        _prettyXML    = dom.toprettyxml()
+        _tree.write(_prettyXML)
     else:
         _tree = xml.etree.ElementTree.parse(fchk)
         _root = _tree.getroot()

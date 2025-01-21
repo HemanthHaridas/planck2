@@ -1,5 +1,6 @@
-import numpy
 from abc import ABC, abstractmethod
+import numpy
+import typing
 
 class Integral(ABC):
     """
@@ -62,7 +63,7 @@ class Integral(ABC):
         pass
 
     @abstractmethod
-    def evaluate(self) -> list[float]:
+    def evaluate(self) -> typing.Union[list[float],list[list[float]]]:
         """
         Evaluates the integral based on the sorted shell pairs and returns the result as a list of floats.
 
