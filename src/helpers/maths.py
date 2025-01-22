@@ -36,7 +36,7 @@ def rotation_matrix(axis: list[float], angle: float) -> list[float]:
     
     # Calculate the Euler parameters for the rotation
     _a = numpy.cos(_ang * numpy.pi/180)
-    _b, _c, _d = -1*_axis * numpy.sin(_ang * numpy.pi/180)
+    _b, _c, _d = -1*_norm * numpy.sin(_ang * numpy.pi/180)
     
     # Now calculate the rotation matrix
     return numpy.array(

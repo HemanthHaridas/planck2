@@ -115,10 +115,10 @@ class Molecule(BaseMolecule):
             # Rotate the  bond_vec about normal plane by angle
             _ini_vec = _distance * _bond_vec
             _rot_mat  = maths.rotation_matrix(axis = _norm_vec, angle = _angle)
-            _rot_bond = numpy.dot(_rot_mat, _bond_vec)
+            _rot_bond = numpy.dot(_rot_mat, _ini_vec)
             
             # Rotate the rotated bond about bond_vec by dihedral
-            _rot_mat  = maths.rotation_matrix(axis = _bond_vec, angle = _dihedral)
+            _rot_mat  = maths.rotation_matrix(axis = _ini_vec, angle = _dihedral)
             _rot_bond = numpy.dot(_rot_mat, _rot_bond)
             
             # Calculate the new position

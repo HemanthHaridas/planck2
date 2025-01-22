@@ -1,5 +1,21 @@
+#  Planck
+#  Copyright (C) 2024 Hemanth Haridas, University of Utah
+#  Contact: hemanthhari23@gmail.com
+# 
+#  This program is free software: you can redistribute it and/or modify it under
+#  the terms of the GNU General Public License as published by the Free Software
+#  Foundation, either version 3 of the License, or a later version.
+# 
+#  This program is distributed in the hope that it will be useful, but WITHOUT ANY
+#  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+#  PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+# 
+#  You should have received a copy of the GNU General Public License along with
+#  this program.  If not, see <http://www.gnu.org/licenses/>.
+
 from enum import Enum
 import numpy
+import scipy.special
 
 class Shell_Type(Enum):
     """
@@ -47,7 +63,7 @@ class Shell:
         coeffs (list[float]): List of contraction coefficients for the basis function.
         center (list[float]): Cartesian coordinates of the center of the basis function.
     """
-    def __init__(self, shell: list[int], exps: list[float], coeffs: list[float], center: list[float]) -> None:
+    def __init__(self, shell: list[int], exps: list[float], coeffs: list[float], center: list[float], is_Normalized: bool) -> None:
         self.shell        = numpy.array(shell)
         self.exponents    = numpy.array(exponents)
         self.coefficients = numpy.array(coefficients)
@@ -56,8 +72,9 @@ class Shell:
         self.basisindex   = 0
         self.type         = Shell_Type(sum(self.shell))
         
-        # Ensure that the basis functions are normalized
-        self._normalize()
+        # Ensure that the shells are normalized
+        if not is_Normalized:
+            self._normalize()
         
     def _normalize(self) -> None:
         """
@@ -71,5 +88,10 @@ class Shell:
             shell (list[int]): The angular momentum quantum numbers [l, m, n] of the basis function,
                 where l, m, n represent the powers of x, y, z in the Gaussian function.
         """
-        _ll, _mm, _nn = self.shell
+        _l, _m, _n = self.shell
         _total_moment = sum(self.shell)
+        _prefact_pgto = pow(2, 2*_total_moment) * pow(2, 1.5)/scipy.special.factorial2(2*_l-1)/scipy.special.factorial2(2*_m-1)/scipy.special.factorial2(2*_n-1)/pow(numpy.pi, 1.5)
+        
+        self.normcoeffs = numpy.sqrt(pow(exponent, _total_moment) * pow(self.exponents, 1.5) * prefactorpGTO)
+        _prefact_cgto   = pow(numpy.pi, 1.5) * factorial2(2*_l - 1) * factorial2(2*_m - 1) * factorial2(2*_n - 1) / pow(2.0, _total_moment)
+        
