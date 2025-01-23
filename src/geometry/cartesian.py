@@ -14,6 +14,7 @@
 #  this program.  If not, see <http://www.gnu.org/licenses/>.
 
 from planck.src.geometry.base import BaseMolecule
+from planck.src.helpers import tables
 import numpy
 
 class Molecule(BaseMolecule):
@@ -24,12 +25,13 @@ class Molecule(BaseMolecule):
 
     Attributes:
     -----------
-    charge (int) : The molecular charge.
-    multi (int)  : The multiplicity of the molecule.
-    natoms (int) : The number of atoms in the molecule.
-    atoms (list) : A list to store the atomic symbols of the molecule.
-    coords (list): A list to store the atomic coordinates as lists of floats.
-
+    atomicnumbers (list): A list to store the atomic numbers.
+    atoms (list)        : A list to store the atomic symbols of the molecule.
+    charge (int)        : The molecular charge.
+    coords (list)       : A list to store the atomic coordinates as lists of floats.
+    multi (int)         : The multiplicity of the molecule.
+    natoms (int)        : The number of atoms in the molecule.
+    
     Methods:
     --------
     geometry(structure: str) -> None:
@@ -70,6 +72,7 @@ class Molecule(BaseMolecule):
         
         # Initialize lists to store atomic symbols and coordinates
         self.atoms  = []
+        self.atomicnumbers = []
         self.coords = []
         
         # Process each atom line to extract atomic symbols and coordinates
@@ -78,9 +81,11 @@ class Molecule(BaseMolecule):
             _coords = [float(_coord) for _coord in _line.split()[1:]]  # Extract and convert coordinates
             self.atoms.append(_atom)  # Append atomic symbol to atoms list
             self.coords.append(_coords)  # Append coordinates to coords list
-        
+            self.atomicnumbers.append(tables.atomic_numbers[_atom]) # Append atomic numbers
+            
         # Flatten the list for easier processing
-        self.coords = numpy.array(self.coords).flatten()
+        self.coords        = numpy.array(self.coords).flatten()
+        self.atomicnumbers = numpy.array(self.atomicnumbers).flatten()
         
     def build(self, atoms: list[str], coords: list[list[float]], charge: int, multi: int) -> None:
         """
@@ -102,7 +107,15 @@ class Molecule(BaseMolecule):
         None: This method does not return a value. It updates the instance attributes `atoms`, `coords`,
             `charge`, and `multi`.
         """
-        self.atoms  = atoms
-        self.coords = coords.to_list()
-        self.charge = charge
-        self.multi  = multi
+        self.atoms         = atoms
+        self.coords        = coords.to_list()
+        self.charge        = charge
+        self.multi         = multi
+        self.atomicnumbers = []
+        
+        # Need to separately process the atoms to get atomic numbers and coords
+        for atom in self.atoms:
+            self.atomicnumbers.append(tables.atomic_numbers[atom])
+        
+        self.coords        = numpy.array(self.coords).flatten()
+        self.atomicnumbers = numpy.array(self.atomicnumbers).flatten()

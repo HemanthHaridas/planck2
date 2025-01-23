@@ -19,7 +19,19 @@ dependencies = [
 requires-python = ">=3.11"  # Minimum Python version
 
 [tool.setuptools]
-packages = ["src", "src.basis", "src.geometry", "src.helpers", "src.integrals", "src.io", "src.symmetry"]  # Include subfolders as packages
+packages = [
+    "src", 
+    "src.basis", 
+    "src.geometry", 
+    "src.helpers", 
+    "src.integrals", 
+    "src.io", 
+    "src.symmetry", 
+    "src.calculators", 
+    "src.calculators.hf", 
+    "src.calculators.mp2", 
+    "src.exceptions"
+    ]  # Include subfolders as packages
 
 [project.urls]
 homepage = "https://github.com/HemanthHaridas/planck_v2"

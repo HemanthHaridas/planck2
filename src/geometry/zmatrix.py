@@ -25,11 +25,12 @@ class Molecule(BaseMolecule):
 
     Attributes:
     -----------
-    charge (int) : The molecular charge.
-    multi (int)  : The multiplicity of the molecule.
-    natoms (int) : The number of atoms in the molecule.
-    atoms (list) : A list to store the atomic symbols of the molecule.
-    coords (list): A list to store the atomic coordinates as lists of floats.
+    atomicnumbers (list): A list to store the atomic numbers.
+    atoms (list)        : A list to store the atomic symbols of the molecule.
+    charge (int)        : The molecular charge.
+    coords (list)       : A list to store the atomic coordinates as lists of floats.
+    multi (int)         : The multiplicity of the molecule.
+    natoms (int)        : The number of atoms in the molecule.
 
     Methods:
     --------
