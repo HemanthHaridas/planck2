@@ -13,6 +13,7 @@
 #  You should have received a copy of the GNU General Public License along with
 #  this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from planck.src.exceptions.base import IllDefinedGeometryError
 from planck.src.geometry.base import BaseMolecule
 from planck.src.helpers import tables
 import numpy
@@ -71,7 +72,9 @@ class Molecule(BaseMolecule):
         self.natoms = len(_structure) - 1  # Subtract 1 to exclude the first line
         
         if self.natoms < 1:
-            
+            raise IllDefinedGeometryError(message="No atoms have been defined. Please define atleast one atom in the input block.")
+            return 
+        
         # Initialize lists to store atomic symbols and coordinates
         self.atoms  = []
         self.atomicnumbers = []
