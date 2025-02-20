@@ -41,3 +41,32 @@ class ChargeMultiplicityError(Exception):
         """
         self.message = message
         super().__init__(self.message)
+
+class IllDefinedGeometryError(Exception):
+    """
+    Exception raised for errors related to invalid geometry.
+
+    This custom exception is used to handle cases where the geometry is ill defined 
+    in quantum chemistry calculations.
+
+    Attributes
+    ----------
+    message : str
+        A description of the error.
+
+    Methods
+    -------
+    __init__(message: str)
+        Initializes the exception with a specific error message.
+    """
+    def __init__(self, message: str):
+        """
+        Initializes the IllDefinedGeometryError with a custom error message.
+
+        Parameters
+        ----------
+        message : str
+            A description of the error, providing details about the invalid combination.
+        """
+        self.message = message
+        super().__init__(self.message)

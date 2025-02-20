@@ -64,15 +64,15 @@ class RHF(BaseCalculator):
         _sanity_check = self.check_multiplicity()
         
     def check_multiplicity(self) -> typing.Union[bool]:
-        _total_electrons = numpy.sum(self.molecule.atomicnumbers) + self.charge
+        _total_electrons = numpy.sum(self.molecule.atomicnumbers) + self.molecule.charge
 
         # Check if the total number of electrons in even and multiplicity is one => No unpaired electrons
-        if (self.multiplicity < 1):
-            raise ChargeMultiplicityError(message = f"It is impossible to have a multiplicity of {self.molecule.multiplicity}")
-        if (_total_electrons % 2 == 0) and (self.molecule.multiplicity == 1):
+        if (self.molecule.multi < 1):
+            raise ChargeMultiplicityError(message = f"It is impossible to have a multiplicity of {self.molecule.multi}")
+        if (_total_electrons % 2 == 0) and (self.molecule.multi == 1):
             return True
         else:
-            raise ChargeMultiplicityError(message = f"The combination of {self.molecule.charge} and {self.molecule.multiplicity} is not allowed. Please check the input carefully!")
+            raise ChargeMultiplicityError(message = f"The combination of {self.molecule.charge} and {self.molecule.multi} is not allowed. Please check the input carefully!")
         return False
         
             
