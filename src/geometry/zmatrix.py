@@ -15,6 +15,7 @@
 
 from planck.src.exceptions.base import IllDefinedGeometryError
 from planck.src.geometry.base import BaseMolecule
+from planck.src.symmetry import symm
 from planck.src.helpers import maths
 from planck.src.helpers import tables
 import numpy
@@ -41,7 +42,7 @@ class Molecule(BaseMolecule):
         number of atoms, atomic symbols, and coordinates.
     """
     
-    def geometry(self, structure: str) -> None:  
+    def geometry(self, structure: str, use_symm: bool = True) -> None:  
         """
         Builds the molecular structure from a Z-matrix input.
 
@@ -157,5 +158,11 @@ class Molecule(BaseMolecule):
             self.coords.append([_x_coord, _y_coord, _z_coord])
             
         # Flatten the list for easier processing
-        self.coords        = numpy.array(self.coords).flatten()
+        self.coords        = numpy.array(self.coords)
         self.atomicnumbers = numpy.array(self.atomicnumbers).flatten()
+    
+        if use_symm:
+            self.symmetrize_molecule()
+            
+    def symmetrize_molecule(self):
+        symm.detect_symmetry(self)

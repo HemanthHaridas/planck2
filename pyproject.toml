@@ -1,26 +1,27 @@
 [build-system]
-requires = ["setuptools>=61.0", "wheel"]  # Build dependencies
+requires = ["setuptools>=77.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "planck"  # Replace with your package name
-version = "0.1.0"  # Initial version
-description = "Python package to perform Hartee-Fock and post Hartee-Fock calculations on molecules."
-readme = "README.md"  # Path to the long description file
-license = {file = "LICENSE"}  # Path to the license file
+name = "planck"
+version = "0.1.0"
+description = "Python package to perform Hartree-Fock and post-Hartree-Fock calculations on molecules."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
 authors = [
-    {name = "Hemanth Haridas", email = "hemanthhari23@gmail.com"}
+    { name = "Hemanth Haridas", email = "hemanthhari23@gmail.com" }
 ]
 
 dependencies = [
     "numpy",  # List of runtime dependencies
-    "scipy"
+    "scipy",
+    pymsym
 ]
 requires-python = ">=3.11"  # Minimum Python version
 
 [tool.setuptools]
 packages = [
-    "src", 
     "src.basis", 
     "src.geometry", 
     "src.helpers", 

@@ -40,7 +40,7 @@ class Molecule(BaseMolecule):
         number of atoms, atomic symbols, and coordinates.
     """
 
-    def geometry(self, structure: str) -> None:
+    def geometry(self, structure: str, use_symm: bool = True) -> None:
         """
         Parses a molecular structure string to extract molecular properties and atomic data.
 
@@ -92,7 +92,7 @@ class Molecule(BaseMolecule):
         self.coords        = numpy.array(self.coords).flatten()
         self.atomicnumbers = numpy.array(self.atomicnumbers).flatten()
         
-    def build(self, atoms: list[str], coords: list[list[float]], charge: int, multi: int) -> None:
+    def build(self, atoms: list[str], coords: list[list[float]], charge: int, multi: int, use_symm: bool = True) -> None:
         """
         Populates the attributes of a molecular object with atomic and molecular data.
 
