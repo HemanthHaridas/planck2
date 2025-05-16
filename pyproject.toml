@@ -16,7 +16,8 @@ authors = [
 dependencies = [
     "numpy",  # List of runtime dependencies
     "scipy",
-    pymsym
+    "pymsym",
+    "pybind11"
 ]
 requires-python = ">=3.11"  # Minimum Python version
 

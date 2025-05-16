@@ -165,4 +165,4 @@ class Molecule(BaseMolecule):
             self.symmetrize_molecule()
             
     def symmetrize_molecule(self):
-        symm.detect_symmetry(self)
+        symm.detect_symmetry(self.coords, self.atomicnumbers, self.atoms)
